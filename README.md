@@ -163,7 +163,8 @@ The actual problem is **H-containing complex oxides**: O–H bonding fundamental
 
 ### Screening Results
 - 3,914 high-k candidates screened with both models
-- **477 materials** satisfy k > 20 AND Eg > 3.0 eV simultaneously
+- **477 materials** satisfy k > 20 AND Eg > 3.0 eV (all candidates)
+- **381 oxide-only materials** satisfy both constraints (ALD/CVD compatible)
 - **4 materials** on the true Pareto front (non-dominated in both objectives)
 
 *See `notebooks/08_dual_screening.ipynb` for Pareto front visualization and Top 20 candidate table.*
@@ -172,10 +173,11 @@ The actual problem is **H-containing complex oxides**: O–H bonding fundamental
 
 ## Future Work
 
-- [ ] Add cation-only electronegativity as explicit feature
+- [x] Expand to dielectric constant (k) prediction — dual objective screening (high k + wide Eg)  *(Phase 2 complete)*
+- [ ] Add oxide-only post-filter to remove non-ALD-compatible compositions from screening pool
+- [ ] Add cation-only electronegativity as explicit feature (Phase 1 improvement)
 - [ ] Include crystal structure features (space group, coordination number) for better accuracy
-- [ ] Expand to dielectric constant (k) prediction — dual objective screening (high k + wide Eg)
-- [ ] Phase 2: CVD/ALD process parameter → thin film property prediction
+- [ ] Phase 3: CVD/ALD process parameter → thin film property prediction
 
 ---
 
