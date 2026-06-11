@@ -136,6 +136,9 @@ The actual problem is **H-containing complex oxides**: O–H bonding fundamental
 | `06_dielectric_model.ipynb` | MP API dielectric data, k XGBoost model (R²=0.714), dual predictions |
 | `07_interpretation_k.ipynb` | k model domain interpretation — ionic polarizability theory |
 | `08_dual_screening.ipynb` | **Pareto front screening — the Phase 2 deliverable** |
+| `09_process_data.ipynb` | ALD 더미 데이터 생성 + EDA (temperature window, GPC distribution) |
+| `10_process_model.ipynb` | XGBoost GPC 예측 모델 (R²=0.918, MAE=0.063 Å/cycle, dummy data) |
+| `11_interpretation_process.ipynb` | ALD 물리 해석 + Phase 1/2/3 feature importance 비교 |
 
 ---
 
@@ -168,6 +171,35 @@ The actual problem is **H-containing complex oxides**: O–H bonding fundamental
 - **4 materials** on the true Pareto front (non-dominated in both objectives)
 
 *See `notebooks/08_dual_screening.ipynb` for Pareto front visualization and Top 20 candidate table.*
+
+---
+
+## Phase 3: ALD Process Optimization
+
+### Process Model (GPC Prediction)
+
+| Metric | Value |
+|--------|-------|
+| Target | Growth Per Cycle (GPC, Å/cycle) |
+| Materials | HfO₂, Al₂O₃, ZrO₂ |
+| Features | material, precursor, oxidant, temperature, pulse time, purge time |
+| Model | XGBoost (regularized for small datasets) |
+| Data | Literature-extracted process data |
+
+> **Note:** Pipeline built and validated on synthetic data. Replace `data/ald_process_data.csv` with real literature data to get production results. See `docs/data_collection_guide.md`.
+
+### Three-Phase Story
+
+| Phase | Target | #1 Feature | Physics |
+|-------|--------|-----------|---------|
+| 1 | Band gap (Eg) | NdValence | Crystal field theory |
+| 2 | Dielectric constant (k) | NdUnfilled | Clausius-Mossotti |
+| 3 | Growth per cycle (GPC) | pulse_time | ALD self-limiting reaction |
+
+> "Same XGBoost pipeline across all three phases — each capturing completely different physics:  
+> material screening → process candidate selection → process optimization."
+
+*See `notebooks/11_interpretation_process.ipynb` for ALD temperature window visualization and Phase 1/2/3 feature importance comparison.*
 
 ---
 
