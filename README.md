@@ -133,6 +133,40 @@ The actual problem is **H-containing complex oxides**: O–H bonding fundamental
 | `03_feature_engineering.ipynb` | Magpie feature extraction (132 features) |
 | `04_model_training.ipynb` | XGBoost training, performance evaluation |
 | `05_interpretation.ipynb` | **Domain interpretation — the core differentiator** |
+| `06_dielectric_model.ipynb` | MP API dielectric data, k XGBoost model (R²=0.714), dual predictions |
+| `07_interpretation_k.ipynb` | k model domain interpretation — ionic polarizability theory |
+| `08_dual_screening.ipynb` | **Pareto front screening — the Phase 2 deliverable** |
+
+---
+
+## Phase 2: Dual-Objective Screening
+
+### Dielectric Constant Model
+| Metric | Value |
+|--------|-------|
+| MAE | 3.43 |
+| R² | 0.714 |
+| Training set | 495 materials |
+| Test set | 124 materials |
+| Filter | 1 < e_total < 100 (ferroelectrics excluded) |
+
+### Key Finding: Two Models, Two Physics
+| | Band Gap Model (Phase 1) | Dielectric Model (Phase 2) |
+|--|--|--|
+| #1 Feature | avg_dev NdValence | avg_dev NdUnfilled |
+| Physical meaning | d-orbital occupancy spread | empty d-orbital spread |
+| Governing physics | Crystal field theory | Clausius-Mossotti / ionic polarizability |
+| High value condition | d⁰ cation (full empty d) | large, soft cations |
+
+> "NdValence (filled d) drives band gap; NdUnfilled (empty d) drives dielectric constant.  
+> Same orbital, opposite signal — the model captured two distinct physical mechanisms from the same feature set."
+
+### Screening Results
+- 3,914 high-k candidates screened with both models
+- **477 materials** satisfy k > 20 AND Eg > 3.0 eV simultaneously
+- **4 materials** on the true Pareto front (non-dominated in both objectives)
+
+*See `notebooks/08_dual_screening.ipynb` for Pareto front visualization and Top 20 candidate table.*
 
 ---
 
