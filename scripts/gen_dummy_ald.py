@@ -13,16 +13,18 @@ def gpc_model(material, temp, pulse_time):
         'Al2O3': {'window': (100, 280), 'base_gpc': 1.05},
         'ZrO2':  {'window': (150, 280), 'base_gpc': 1.0},
     }
+    if material not in params:
+        raise ValueError(f"Unknown material '{material}'. Expected: {list(params)}")
     p = params[material]
     lo, hi = p['window']
     gpc = p['base_gpc']
     if temp < lo:
-        gpc *= (0.5 + 0.5 * (temp / lo))
+        gpc *= (0.5 + 0.5 * (temp / lo))  # sub-window ramp: GPC → 50% at T=0
     elif temp > hi:
-        gpc *= (1 + 0.01 * (temp - hi))
-    if pulse_time < 0.1:
+        gpc *= (1 + 0.01 * (temp - hi))   # CVD regime: ~1%/°C above window top
+    if pulse_time < 0.1:                   # unsaturated regime: < 100ms pulse
         gpc *= (pulse_time / 0.1)
-    return round(gpc + np.random.normal(0, 0.05), 3)
+    return round(gpc + np.random.normal(0, 0.05), 3)  # ~5% measurement noise
 
 records = []
 configs = {
@@ -31,8 +33,9 @@ configs = {
     'ZrO2':  {'precursors': ['ZrCl4', 'TDMAZ'],            'oxidants': ['H2O', 'O3'],  'temps': (120, 330)},
 }
 
+n_samples = {'HfO2': 70, 'Al2O3': 60, 'ZrO2': 40}
 for material, cfg in configs.items():
-    n = 70 if material == 'HfO2' else 60 if material == 'Al2O3' else 40
+    n = n_samples[material]
     for _ in range(n):
         temp      = np.random.randint(*cfg['temps'])
         pulse     = round(np.random.choice([0.05, 0.1, 0.2, 0.3, 0.5, 1.0, 2.0]), 2)
