@@ -1,5 +1,11 @@
+# 민감 정보
 .env
-data/*.json
-data/*.csv
+
+# 캐시
 __pycache__/
 .ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
